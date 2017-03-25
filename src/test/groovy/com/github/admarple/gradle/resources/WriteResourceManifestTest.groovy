@@ -1,33 +1,36 @@
 package com.github.admarple.gradle.resources
 
 import org.gradle.api.Project
-import org.gradle.testfixtures.ProjectBuilder
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertTrue
+import static org.junit.Assert.fail
 
-class WriteResourceManifestTest {
+
+class WriteResourceManifestTest extends BaseTest {
     private final File testDir = new File("build/tmp/test")
     private Project project
     private WriteResourceManifest writeResourceManifest
 
+    @Override
     @Before
     public void setup() {
-        project = ProjectBuilder.builder().withProjectDir(testDir).build()
+        super.setup()
         writeResourceManifest = project.tasks.create('writeResourcesManifest', WriteResourceManifest.class)
         writeResourceManifest.manifestName('resource_manifest.txt')
     }
 
-    @After
-    void tearDown() {
-        if (testDir.exists()) {
-            testDir.deleteDir()
-        }
-    }
-
     @Test
-    public void testWriteManifest() {
-        // TODO
+    public void testExecute() {
+        writeResourceManifest.execute()
+
+        List<String> manifestLines = writeResourceManifest.getOutputFile().readLines()
+        assertTrue(manifestLines.contains('vended.properties'))
+        manifestLines.each {
+            if (it.contains('unvended.properties')) {
+                fail('unvended.properties should be excluded')
+            }
+        }
     }
 }

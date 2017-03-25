@@ -17,7 +17,7 @@ class WriteResourceManifest extends DefaultTask {
 
     @OutputFile
     def File getOutputFile() {
-        return new File(sourceSet.output.resourcesDir, "quidsi_resources_manifest.txt")
+        return new File(sourceSet.output.resourcesDir, manifestName)
     }
 
     /**
@@ -49,7 +49,7 @@ class WriteResourceManifest extends DefaultTask {
      * @param resourceName
      * @return
      */
-    boolean isVendedResource(String resourceName) {
+    private boolean isVendedResource(String resourceName) {
         return !resourceName.startsWith("META-INF")
     }
 

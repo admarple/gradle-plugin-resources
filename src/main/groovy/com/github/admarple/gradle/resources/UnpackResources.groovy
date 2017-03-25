@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets
 
 
 class UnpackResources extends DefaultTask {
-    private static final Charset CHARSET = StandardCharsets.UTF_8;
+    private static final Charset CHARSET = StandardCharsets.UTF_8
     private String manifestName = project.name + '_resources_manifest.txt'
 
     /**
@@ -39,10 +39,14 @@ class UnpackResources extends DefaultTask {
     }
 
     String resourceAsString(String resource) {
-        return IOUtils.toString(getClass().getClassLoader().getResourceAsStream(resource), CHARSET);
+        def resourceStream = getClass().getClassLoader().getResourceAsStream(resource)
+        if (resourceStream == null) {
+            throw new RuntimeException('Unable to find resource: ' + resource)
+        }
+        return IOUtils.toString(resourceStream, CHARSET)
     }
 
-    public WriteResourceManifest manifestName(String name) {
+    public UnpackResources manifestName(String name) {
         this.manifestName = name
         return this
     }
