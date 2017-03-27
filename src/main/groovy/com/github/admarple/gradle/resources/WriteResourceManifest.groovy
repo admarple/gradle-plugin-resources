@@ -4,6 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.EmptyFileVisitor
 import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 
 
@@ -11,9 +12,9 @@ import org.gradle.api.tasks.TaskAction
  * Build a manifest of all resources.  This will be used by the plugins at runtime to identify the resources available
  * in the jar.
  */
-class WriteResourceManifest extends DefaultTask {
-    private String manifestName = project.name + '_resources_manifest.txt'
-    private sourceSet = project.sourceSets.main;
+public class WriteResourceManifest extends DefaultTask {
+    String manifestName = project.name + '_resources_manifest.txt'
+    SourceSet sourceSet = project.sourceSets.main
 
     @OutputFile
     def File getOutputFile() {

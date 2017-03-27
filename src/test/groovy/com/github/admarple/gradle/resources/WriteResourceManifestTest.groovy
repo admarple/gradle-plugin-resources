@@ -1,6 +1,5 @@
 package com.github.admarple.gradle.resources
 
-import org.gradle.api.Project
 import org.junit.Before
 import org.junit.Test
 
@@ -9,8 +8,6 @@ import static org.junit.Assert.fail
 
 
 class WriteResourceManifestTest extends BaseTest {
-    private final File testDir = new File("build/tmp/test")
-    private Project project
     private WriteResourceManifest writeResourceManifest
 
     @Override

@@ -9,7 +9,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 
-class UnpackResources extends DefaultTask {
+public class UnpackResources extends DefaultTask {
     private static final Charset CHARSET = StandardCharsets.UTF_8
     private String manifestName = project.name + '_resources_manifest.txt'
 

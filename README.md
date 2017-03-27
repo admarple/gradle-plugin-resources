@@ -13,6 +13,25 @@ all resources that should be bundled with your plugin.
 
 ```groovy
 // In my-standard-checkstyle/build.gradle
+
+// buildscript is required for changes to build.gradle
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'com.github.admarple', name: 'gradle-plugin-resources', version: '1.0.0'
+    }
+}
+
+// compile dependency is required for changes in the Plugin<Project> implementation
+repositories {
+    jcenter()
+}
+dependencies {
+    classpath group: 'com.github.admarple', name: 'gradle-plugin-resources', version: '1.0.0'
+}
+
 task resourceManifest(type: WriteResourceManifest)
 resourceManifest.manifestName('my-standard-checkstyle-manifest.txt')
 resourceManifest.dependsOn processResources
@@ -30,6 +49,7 @@ class MyStandardCheckstyle implements Plugin<Project> {
             apply plugin: 'checkstyle'
 
             task('unpackStandardResources', type: UnpackStandardResources)
+            unpackStandardResources.manifestName('my-standard-checkstyle-manifest.txt')
             project.tasks.classes.dependsOn unpackStandardResources
 
             checkstyle {
