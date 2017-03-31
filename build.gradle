@@ -1,3 +1,7 @@
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
 apply plugin: 'groovy'
 
 repositories {
@@ -13,9 +17,10 @@ dependencies {
 }
 
 group = 'com.github.admarple'
-version = "1.0.0"
+version = '1.0.0'
 
 apply plugin: 'maven-publish'
+apply plugin: 'java-library'
 
 publishing {
     publications {
@@ -23,13 +28,32 @@ publishing {
             from components.java
         }
     }
-    publications.all {
-        pom.withXml {
-            asNode().dependencies.'*'.findAll() {
-                it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                    dep.name == it.artifactId.text()
-                }
-            }.each { it.scope*.value = 'compile'}
+}
+
+ext.bintrayUser = hasProperty('bintrayUser') ? bintrayUser : 'no_user_configured'
+ext.bintrayKey = hasProperty('bintrayKey') ? bintrayKey : 'no_key_configured'
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+
+    publications = ['mainJar']
+
+    pkg {
+        repo = 'gradle'
+        name = project.name
+        userOrg = 'admarple-org'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/admarple/gradle-plugin-resources'
+        version {
+            name = project.version
+            released  = new Date()
         }
     }
+
+    /*
+     * To publish new versions after they've been uploaded:
+     *   curl -v -u "$(cat /tmp/bintray_auth_header.txt)" \
+     *     -X POST 'https://api.bintray.com/content/admarple-org/gradle/gradle-plugin-resources/1.0.0/publish'
+     */
 }
